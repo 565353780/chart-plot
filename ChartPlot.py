@@ -141,7 +141,6 @@ class ChartPlot:
 
         edit_line_idx = 0
         edit_point_idx = 0
-        edit_y_value = self.line_list[0].point_list[0].y_value
         while True:
             plt.cla()
 
@@ -155,17 +154,25 @@ class ChartPlot:
 
             edit_x_idx = self.line_list[edit_line_idx].point_list[edit_point_idx].x_idx
             edit_x_value = self.line_list[edit_line_idx].x_list[edit_x_idx]
-            print("EDIT at line " + str(edit_line_idx) + ", point " + str(edit_point_idx) + ", y_value " + str(edit_y_value))
+            edit_y_value = self.line_list[edit_line_idx].point_list[edit_point_idx].y_value
             plt.plot([edit_x_value], [edit_y_value], "bo", linewidth=20, label="EDIT")
 
             # position can be : upper lower left right center
             plt.legend(loc="upper right", shadow=True)
-            plt.pause(0.1)
+            plt.pause(0.001)
 
             input_key = getch()
             if input_key == "q":
                 plt.ioff()
                 break
+            if input_key == "h":
+                edit_point_idx = max(0, edit_point_idx - 1)
+            elif input_key == "l":
+                edit_point_idx = min(len(self.line_list[edit_line_idx].point_list) - 1, edit_point_idx + 1)
+            elif input_key == "j":
+                self.line_list[edit_line_idx].point_list[edit_point_idx].y_value -= 0.1
+            elif input_key == "k":
+                self.line_list[edit_line_idx].point_list[edit_point_idx].y_value += 0.1
         return True
 
 if __name__ == "__main__":
