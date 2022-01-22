@@ -11,19 +11,59 @@ class LinePoint:
         return
 
 class Line:
-    def __init__(self, line_idx, x_start, x_num, x_step):
+    def __init__(self, line_idx):
         self.line_idx = line_idx
-        self.x_list = x_start
+        self.line_type = "g-"
+        self.line_width = 2
+        self.label = str(self.line_idx)
+        self.x_list = []
         self.point_list = []
         return
 
     def reset(self):
+        self.x_list.clear()
         self.point_list.clear()
         return True
 
-    def addPoint(self, point):
-        self.point_list.append(point)
+    def setLineProperty(self, line_type, line_width, label):
+        self.line_type = line_type
+        self.line_width = line_width
+        self.label = label
         return True
+
+    def setXRange(self, x_start, x_num, x_step):
+        new_x = x_start
+        for _ in range(x_num):
+            self.x_list.append(new_x)
+            new_x += x_step
+        return True
+
+    def addPoint(self, x_idx, y_value):
+        if x_idx >= len(self.x_list):
+            print("Line::addPoint :")
+            print("x_idx out of range!")
+            return False
+
+        new_point = LinePoint(x_idx, y_value)
+        self.point_list.append(new_point)
+        return True
+
+    def getLine(self):
+        line_x_list = []
+        line_y_list = []
+
+        y_list = []
+        for i in range(len(self.x_list)):
+            y_list.append(None)
+        for point in self.point_list:
+            y_list[point.x_idx] = point.y_value
+
+        for i in range(len(y_list)):
+            if y_list[i] is None:
+                continue
+            line_x_list.append(self.x_list[i])
+            line_y_list.append(y_list[i])
+        return line_x_list, line_y_list
 
 class ChartPlot:
     def __init__(self):
@@ -34,40 +74,43 @@ class ChartPlot:
         self.line_list.clear()
         return True
 
-    def addLine(self, x_start, x_num, x_step):
+    def addLine(self, x_start, x_num, x_step, line_type, line_width, label):
         new_line = Line(len(self.line_list))
-        new_x = x_start
-        for i in range(x_num):
-            new_point = LinePoint(new_x, )
-            self.x_list.append(new_x)
-            self.y_list.append(None)
-            new_x += x_step
+        if not new_line.setLineProperty(line_type, line_width, label):
+            print("ChartPlot::addLine :")
+            print("setLineProperty for line " + str(new_line.line_idx) + " failed!")
+            return False
+
+        if not new_line.setXRange(x_start, x_num, x_step):
+            print("ChartPlot::addLine :")
+            print("setXRange for line " + str(new_line.line_idx) + " failed!")
+            return False
+
+        self.line_list.append(new_line)
         return True
 
     def setXRange(self, line_idx, x_start, x_num, x_step):
-        new_x = x_start
-        for _ in range(x_num):
-            self.x_list.append(new_x)
-            self.y_list.append(None)
-            new_x += x_step
-        return True
-
-    def setYValue(self, x_idx, y_value):
-        if x_idx >= len(self.x_list):
-            print("ChartPlot::setYValue :")
-            print("x_idx out of range!")
+        if line_idx >= len(self.line_list):
+            print("ChartPlot::setXRange :")
+            print("line_idx out of range!")
             return False
 
-        self.y_list[x_idx] = y_value
+        if not self.line_list[line_idx].setXRange(x_start, x_num, x_step):
+            print("ChartPlot::setXRange :")
+            print("setXRange for line " + str(line_idx) + " failed!")
+            return False
         return True
 
-    def addFixedPoint(self, x_idx, y_value):
-        if x_idx >= len(self.x_list):
-            print("ChartPlot::addFixedPoint :")
-            print("x_idx out of range!")
+    def addPoint(self, line_idx, x_idx, y_value):
+        if line_idx >= len(self.line_list):
+            print("ChartPlot::addPoint :")
+            print("line_idx out of range!")
             return False
 
-        self.fixed_point_list.append([x_idx, y_value])
+        if not self.line_list[line_idx].addPoint(x_idx, y_value):
+            print("ChartPlot::addPoint :")
+            print("addPoint for line " + str(line_idx) + " failed!")
+            return False
         return True
 
     def render(self):
@@ -80,10 +123,12 @@ class ChartPlot:
             plt.xlabel("x label")
             plt.ylabel("y label")
 
-            plt.plot(self.x_list, self.y_list, "r-", linewidth=2.0, label="line 1 label")
+            for line in self.line_list:
+                line_x_list, line_y_list = line.getLine()
+                plt.plot(line_x_list, line_y_list, line.line_type, linewidth=line.line_width, label=line.label)
 
             # position can be : upper lower left right center
-            plt.legend(loc="upper left", shadow=True)
+            plt.legend(loc="upper right", shadow=True)
             plt.pause(0.1)
 
             input_key = getch()
@@ -101,19 +146,15 @@ if __name__ == "__main__":
     x_step = 1
 
     chart_plot = ChartPlot()
-    chart_plot.setXRange(x_start, x_num, x_step)
+    chart_plot.addLine(x_start, x_num, x_step, "r:", 5, "Data 1")
+    chart_plot.addLine(x_start, x_num, x_step, "g--", 2, "Data 2")
+    chart_plot.addLine(x_start, x_num, x_step, "b-", 0.5, "Data 3")
     for i in range(len(yy)):
-        chart_plot.setYValue(i, yy[i])
+        chart_plot.addPoint(0, i, yy[i])
+    for i in range(len(xx)):
+        chart_plot.addPoint(1, i, xx[i])
+    for i in range(len(zz)):
+        chart_plot.addPoint(2, i, zz[i])
 
     chart_plot.render()
-
-    plt.plot(yy, color='r', linewidth=5, linestyle=':', label='Data 1')
-    plt.plot(xx, color='g', linewidth=2, linestyle='--', label='Data 2')
-    plt.plot(zz, color='b', linewidth=0.5, linestyle='-', label='Data 3')
-    plt.legend(loc=2)
-    plt.xlabel('X')
-    plt.ylabel('Y')
-    plt.title('title')
-    plt.ylim(0,10)
-    plt.show()
 
