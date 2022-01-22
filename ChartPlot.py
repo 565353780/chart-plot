@@ -45,6 +45,23 @@ class Line:
             return False
 
         new_point = LinePoint(x_idx, y_value)
+
+        if len(self.point_list) == 0:
+            self.point_list.append(new_point)
+            return True
+
+        for i in range(len(self.point_list)):
+            search_x_idx = self.point_list[i].x_idx
+            if search_x_idx < x_idx:
+                continue
+            if search_x_idx == x_idx:
+                print("Line::addPoint :")
+                print("point at x_idx = " + str(x_idx) + " already exist")
+                return False
+
+            self.point_list.insert(i, new_point)
+            return True
+
         self.point_list.append(new_point)
         return True
 
@@ -113,9 +130,18 @@ class ChartPlot:
             return False
         return True
 
-    def render(self):
+    def renderLine(self):
         plt.figure(figsize=(8, 6), dpi=80)
         plt.ion()
+
+        if len(self.line_list) == 0:
+               print("ChartPlot::renderLine :")
+               print("no lines to render!")
+               return True
+
+        edit_line_idx = 0
+        edit_point_idx = 0
+        edit_y_value = self.line_list[0].point_list[0].y_value
         while True:
             plt.cla()
 
@@ -126,6 +152,11 @@ class ChartPlot:
             for line in self.line_list:
                 line_x_list, line_y_list = line.getLine()
                 plt.plot(line_x_list, line_y_list, line.line_type, linewidth=line.line_width, label=line.label)
+
+            edit_x_idx = self.line_list[edit_line_idx].point_list[edit_point_idx].x_idx
+            edit_x_value = self.line_list[edit_line_idx].x_list[edit_x_idx]
+            print("EDIT at line " + str(edit_line_idx) + ", point " + str(edit_point_idx) + ", y_value " + str(edit_y_value))
+            plt.plot([edit_x_value], [edit_y_value], "bo", linewidth=20, label="EDIT")
 
             # position can be : upper lower left right center
             plt.legend(loc="upper right", shadow=True)
@@ -156,5 +187,5 @@ if __name__ == "__main__":
     for i in range(len(zz)):
         chart_plot.addPoint(2, i, zz[i])
 
-    chart_plot.render()
+    chart_plot.renderLine()
 
