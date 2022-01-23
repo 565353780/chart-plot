@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from Line import Line
+from LineMethod.line import Line
 
 class LineManager(object):
     def __init__(self):

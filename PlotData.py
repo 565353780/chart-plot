@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import json
-from LineRenderer import LineRenderer
+from LineMethod.line_renderer import LineRenderer
 
 if __name__ == "__main__":
-    json_file_path = "./coscan_data/scene_recovery_rate.txt"
+    json_file_path = "./test.json"
     x_start = 0
     x_step = 1
     fit_polyline = False
@@ -17,21 +17,18 @@ if __name__ == "__main__":
 
     line_renderer = LineRenderer()
 
-    data = {}
+    data_stream = ""
     with open(json_file_path, "r") as f:
-        data = json.load(f)
-    for key in data.keys():
-        key_data = data[key]
-        x_num = len(key_data)
-        line_renderer.addLine(
-            x_start, x_num, x_step,
-            "r:", 5, key, fit_polyline,
-            show_confidence_interval,
-            confidence_diff_min, confidence_diff_max)
-        for i in range(len(key_data)):
-            line_renderer.addPoint(0, i, key_data[i])
+        data_stream = f.read()
+    data_json = json.loads(data_stream)
+    line_renderer.loadDataJson(data_json)
 
     line_renderer.renderLine(
         show_line_label,
         show_confidence_interval_label)
+
+    data_json = line_renderer.getDataJson()
+    data_json_dump = json.dumps(data_json, indent=4)
+    with open(json_file_path, "w") as f:
+        f.write(data_json_dump)
 

@@ -4,7 +4,7 @@
 from random import random
 import numpy as np
 
-from LinePoint import LinePoint
+from LineMethod.line_point import LinePoint
 
 class Line(object):
     def __init__(self, line_idx):

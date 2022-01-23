@@ -6,11 +6,11 @@ import os
 import json
 import matplotlib.pyplot as plt
 
-from LineManager import LineManager
+from LineMethod.line_renderer import LineRenderer
 
-class PlaceData(LineManager):
+class PlaceData(LineRenderer):
     def __init__(self):
-        LineManager.__init__(self)
+        LineRenderer.__init__(self)
 
         self.x_start = 0
         self.x_num = 100
@@ -145,10 +145,7 @@ if __name__ == "__main__":
     place_data.renderLine(show_line_label, show_confidence_interval_label)
 
     data_json = place_data.getDataJson()
-    json_dump = json.dumps(data_json)
-    if os.path.exists(save_json_file_path):
-        print("save_json_file_path already exist!")
-    else:
-        with open(save_json_file_path, "w") as f:
-            f.write(data_json)
+    data_json_dump = json.dumps(data_json, indent=4)
+    with open(save_json_file_path, "w") as f:
+        f.write(data_json_dump)
 

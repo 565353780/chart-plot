@@ -4,9 +4,9 @@
 from getch import getch
 import matplotlib.pyplot as plt
 
-from LineManager import LineManager
+from LineMethod.line_manager import LineManager
 
-class LineRender(LineManager):
+class LineRenderer(LineManager):
     def __init__(self):
         LineManager.__init__(self)
         return
@@ -16,7 +16,7 @@ class LineRender(LineManager):
         plt.ion()
 
         if len(self.line_list) == 0:
-           print("LineManager::renderLine :")
+           print("LineRenderer::renderLine :")
            print("no lines to render!")
            return True
 
@@ -25,7 +25,7 @@ class LineRender(LineManager):
         while True:
             plt.cla()
 
-            plt.title("LineRender")
+            plt.title("LineRenderer")
             plt.xlabel("x label")
             plt.ylabel("y label")
 
@@ -114,31 +114,31 @@ if __name__ == "__main__":
     show_line_label = True
     show_confidence_interval_label = False
 
-    line_render = LineRender()
+    line_renderer = LineRenderer()
 
-    line_render.addLine(
+    line_renderer.addLine(
         x_start, x_num, x_step,
         "r:", 5, "Data 1", fit_polyline,
         show_confidence_interval,
         confidence_diff_min, confidence_diff_max)
     for i in range(len(yy)):
-        line_render.addPoint(0, i, xx[i])
+        line_renderer.addPoint(0, i, xx[i])
 
-    line_render.addLine(
+    line_renderer.addLine(
         x_start, x_num, x_step,
         "g--", 2, "Data 2", fit_polyline,
         show_confidence_interval,
         confidence_diff_min, confidence_diff_max)
     for i in range(len(xx)):
-        line_render.addPoint(1, i, yy[i])
+        line_renderer.addPoint(1, i, yy[i])
 
-    line_render.addLine(
+    line_renderer.addLine(
         x_start, x_num, x_step,
         "b-", 0.5, "Data 3", fit_polyline,
         show_confidence_interval,
         confidence_diff_min, confidence_diff_max)
     for i in range(len(zz)):
-        line_render.addPoint(2, i, zz[i])
+        line_renderer.addPoint(2, i, zz[i])
 
-    line_render.renderLine(show_line_label, show_confidence_interval_label)
+    line_renderer.renderLine(show_line_label, show_confidence_interval_label)
 
