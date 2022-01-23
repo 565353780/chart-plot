@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from random import random
+import json
 import numpy as np
 
 class LinePoint(object):
@@ -147,6 +148,19 @@ class Line(object):
                 self.confidence_diff_min + confidence_diff)
         return True
 
+    def getPointData(self):
+        point_data = []
+        for point in self.point_list:
+            point_data.append([point.x_idx, point.y_value])
+        return point_data
+
+    def loadPointData(self, point_data):
+        self.point_list.clear()
+        for point in point_data:
+            new_point = LinePoint(point[0], point[1])
+            self.point_list.append(new_point)
+        return True
+
 class LineManager(object):
     def __init__(self):
         self.line_list = []
@@ -230,4 +244,41 @@ class LineManager(object):
             y_min = min(y_min, min(line.y_list))
             y_max = max(y_max, max(line.y_list))
         return y_max - y_min
+
+    def getDataJson(self):
+        data_json = {}
+        line_json = {}
+        for line in self.line_list:
+            line_json["line_type"] = line.line_type
+            line_json["line_width"] = line.line_width
+            line_json["label"] = line.label
+            line_json["x_list"] = line.x_list
+            line_json["point_list"] = line.getPointData()
+            line_json["y_list"] = line.y_list
+            line_json["fit_polyline"] = line.fit_polyline
+            line_json["show_confidence_interval"] = line.show_confidence_interval
+            line_json["confidence_diff_min"] = line.confidence_diff_min
+            line_json["confidence_diff_max"] = line.confidence_diff_max
+            line_json["confidence_interval_list"] = line.confidence_interval_list
+            data_json[line.label] = line_json
+        return data_json
+
+    def loadDataJson(self, data_json):
+        self.reset()
+        for line_label in data_json.keys():
+            new_line = Line(len(self.line_list))
+            line_json = data_json[line_label]
+            new_line.line_type = line_json["line_type"]
+            new_line.line_width = line_json["line_width"]
+            new_line.label = line_json["label"]
+            new_line.x_list = line_json["x_list"]
+            new_line.loadPointData(line_json["point_list"])
+            new_line.y_list = line_json["y_list"]
+            new_line.fit_polyline = line_json["fit_polyline"]
+            new_line.show_confidence_interval = line_json["show_confidence_interval"]
+            new_line.confidence_diff_min = line_json["confidence_diff_min"]
+            new_line.confidence_diff_max = line_json["confidence_diff_max"]
+            new_line.confidence_interval_list = line_json["confidence_interval_list"]
+            self.line_list.append(new_line)
+        return True
 

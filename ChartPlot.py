@@ -16,9 +16,9 @@ class ChartPlot(LineManager):
         plt.ion()
 
         if len(self.line_list) == 0:
-               print("LineManager::renderLine :")
-               print("no lines to render!")
-               return True
+           print("LineManager::renderLine :")
+           print("no lines to render!")
+           return True
 
         edit_line_idx = 0
         edit_point_idx = 0
@@ -100,8 +100,6 @@ class ChartPlot(LineManager):
                 self.line_list[edit_line_idx].updateConfidenceInterval()
         return True
 
-
-
 if __name__ == "__main__":
     xx = [1,2,3,4,5,2,3,7,4,3,9,2]
     yy = [3,6,4,8,2,6,9,4,5,8,1,7]
@@ -128,7 +126,7 @@ if __name__ == "__main__":
 
     chart_plot.addLine(
         x_start, x_num, x_step,
-        "g--", 2, "Data 2",fit_polyline,
+        "g--", 2, "Data 2", fit_polyline,
         show_confidence_interval,
         confidence_diff_min, confidence_diff_max)
     for i in range(len(xx)):

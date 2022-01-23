@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from getch import getch
+import os
+import json
 import matplotlib.pyplot as plt
 
 from LineManager import LineManager
@@ -14,11 +16,6 @@ class PlaceData(LineManager):
     def renderLine(self, show_line_label, show_confidence_interval_label):
         plt.figure(figsize=(8, 6), dpi=80)
         plt.ion()
-
-        if len(self.line_list) == 0:
-               print("PlaceData::renderLine :")
-               print("no lines to render!")
-               return True
 
         edit_line_idx = 0
         edit_point_idx = 0
@@ -110,8 +107,17 @@ if __name__ == "__main__":
     confidence_diff_max = 1.0
     show_line_label = True
     show_confidence_interval_label = False
+    save_json_file_path = "./test.json"
 
     place_data = PlaceData()
 
     place_data.renderLine(show_line_label, show_confidence_interval_label)
+
+    data_json = place_data.getDataJson()
+    json_dump = json.dumps(data_json)
+    if os.path.exists(save_json_file_path):
+        print("save_json_file_path already exist!")
+    else:
+        with open(save_json_file_path, "w") as f:
+            f.write(data_json)
 

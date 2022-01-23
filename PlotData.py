@@ -5,7 +5,7 @@ import json
 from ChartPlot import ChartPlot
 
 if __name__ == "__main__":
-    json_file_path = "./coscan_data/scene_recovery_rate.txt"
+    json_file_path = "./coscan_data/scene_recovery_rate.json"
     x_start = 0
     x_step = 1
     fit_polyline = False
