@@ -5,13 +5,7 @@ import json
 from LineMethod.line_renderer import LineRenderer
 
 if __name__ == "__main__":
-    json_file_path = "./test.json"
-    x_start = 0
-    x_step = 1
-    fit_polyline = False
-    show_confidence_interval = True
-    confidence_diff_min = 5
-    confidence_diff_max = 10
+    json_file_path = "./coscan_data/test.json"
     show_line_label = True
     show_confidence_interval_label = False
 

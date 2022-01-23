@@ -8,8 +8,14 @@ pip install matplotlib getch numpy
 
 ## Run
 
+### Create Data
 ```bash
-python ChartPlot.py
+python PlaceData.py
+```
+
+### Restore Data
+```bash
+python PlotData.py
 ```
 
 ## Control
