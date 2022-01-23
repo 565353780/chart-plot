@@ -95,9 +95,13 @@ class LineEditor(LineRenderer):
                     continue
                 if input_key == "j":
                     edit_line_idx = max(edit_line_idx - 1, 0)
+                    if edit_point_idx >= len(self.line_list[edit_line_idx].point_list):
+                        edit_point_idx = len(self.line_list[edit_line_idx].point_list) - 1
                     continue
                 if input_key == "k":
                     edit_line_idx = min(edit_line_idx + 1, len(self.line_list) - 1)
+                    if edit_point_idx >= len(self.line_list[edit_line_idx].point_list):
+                        edit_point_idx = len(self.line_list[edit_line_idx].point_list) - 1
                     continue
                 continue
             if self.mode == self.EDIT:
@@ -148,6 +152,27 @@ class LineEditor(LineRenderer):
                 if input_key == "a":
                     self.line_list[edit_line_idx].addPoint(edit_x, edit_y)
                     self.line_list[edit_line_idx].updateConfidenceInterval()
+                    continue
+                if input_key == "n":
+                    line_type = "-"
+                    line_width = 2
+                    fit_polyline = False
+                    show_confidence_interval = True
+                    confidence_diff_min = 5
+                    confidence_diff_max = 10
+
+                    new_line_idx = len(self.line_list)
+                    self.addLine(line_type,
+                                 line_width,
+                                 str(new_line_idx),
+                                 fit_polyline,
+                                 show_confidence_interval,
+                                 confidence_diff_min,
+                                 confidence_diff_max)
+                    self.line_list[new_line_idx].addPoint(edit_x, edit_y)
+                    self.line_list[new_line_idx].updateConfidenceInterval()
+                    edit_line_idx = new_line_idx
+                    edit_point_idx = 0
                     continue
         return True
 

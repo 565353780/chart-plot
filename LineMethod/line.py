@@ -10,7 +10,7 @@ class Line(object):
     def __init__(self, line_idx):
         self.line_idx = line_idx
 
-        self.line_type = "g-"
+        self.line_type = "-"
         self.line_width = 2
         self.label = str(self.line_idx)
 

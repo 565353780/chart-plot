@@ -28,7 +28,7 @@ class PlaceData(LineEditor):
         self.confidence_diff_min = confidence_diff_min
         self.confidence_diff_max = confidence_diff_max
 
-        line_type = "r-"
+        line_type = "-"
         line_width = 2
 
         self.addLine(line_type,

@@ -78,6 +78,7 @@ class LineManager(object):
             line_json["line_width"] = line.line_width
             line_json["label"] = line.label
             line_json["point_list"] = line.getPointData()
+            print(line.getPointData())
             line_json["fit_polyline"] = line.fit_polyline
             line_json["show_confidence_interval"] = line.show_confidence_interval
             line_json["confidence_diff_min"] = line.confidence_diff_min
