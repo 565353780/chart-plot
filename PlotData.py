@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import json
-from ChartPlot import ChartPlot
+from LineRenderer import LineRenderer
 
 if __name__ == "__main__":
-    json_file_path = "./coscan_data/scene_recovery_rate.json"
+    json_file_path = "./coscan_data/scene_recovery_rate.txt"
     x_start = 0
     x_step = 1
     fit_polyline = False
@@ -15,7 +15,7 @@ if __name__ == "__main__":
     show_line_label = True
     show_confidence_interval_label = False
 
-    chart_plot = ChartPlot()
+    line_renderer = LineRenderer()
 
     data = {}
     with open(json_file_path, "r") as f:
@@ -23,15 +23,15 @@ if __name__ == "__main__":
     for key in data.keys():
         key_data = data[key]
         x_num = len(key_data)
-        chart_plot.addLine(
+        line_renderer.addLine(
             x_start, x_num, x_step,
             "r:", 5, key, fit_polyline,
             show_confidence_interval,
             confidence_diff_min, confidence_diff_max)
         for i in range(len(key_data)):
-            chart_plot.addPoint(0, i, key_data[i])
+            line_renderer.addPoint(0, i, key_data[i])
 
-    chart_plot.renderLine(
+    line_renderer.renderLine(
         show_line_label,
         show_confidence_interval_label)
 

@@ -11,7 +11,30 @@ from LineManager import LineManager
 class PlaceData(LineManager):
     def __init__(self):
         LineManager.__init__(self)
+
+        self.x_start = 0
+        self.x_num = 100
+        self.x_step = 1
+        self.fit_polyline = False
+        self.show_confidence_interval = True
+        self.confidence_diff_min = 0.5
+        self.confidence_diff_max = 1.0
         return
+
+    def setParam(self,
+                 x_start, x_num, x_step,
+                 fit_polyline,
+                 show_confidence_interval,
+                 confidence_diff_min,
+                 confidence_diff_max):
+        self.x_start = x_start
+        self.x_num = x_num
+        self.x_step = x_step
+        self.fit_polyline = fit_polyline
+        self.show_confidence_interval = show_confidence_interval
+        self.confidence_diff_min = confidence_diff_min
+        self.confidence_diff_max = confidence_diff_max
+        return True
 
     def renderLine(self, show_line_label, show_confidence_interval_label):
         plt.figure(figsize=(8, 6), dpi=80)
@@ -110,6 +133,14 @@ if __name__ == "__main__":
     save_json_file_path = "./test.json"
 
     place_data = PlaceData()
+
+    place_data.setParam(x_start,
+                        x_num,
+                        x_step,
+                        fit_polyline,
+                        show_confidence_interval,
+                        confidence_diff_min,
+                        confidence_diff_max)
 
     place_data.renderLine(show_line_label, show_confidence_interval_label)
 

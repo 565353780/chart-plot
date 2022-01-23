@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 from LineManager import LineManager
 
-class ChartPlot(LineManager):
+class LineRender(LineManager):
     def __init__(self):
         LineManager.__init__(self)
         return
@@ -25,7 +25,7 @@ class ChartPlot(LineManager):
         while True:
             plt.cla()
 
-            plt.title("LineManager Render")
+            plt.title("LineRender")
             plt.xlabel("x label")
             plt.ylabel("y label")
 
@@ -114,31 +114,31 @@ if __name__ == "__main__":
     show_line_label = True
     show_confidence_interval_label = False
 
-    chart_plot = ChartPlot()
+    line_render = LineRender()
 
-    chart_plot.addLine(
+    line_render.addLine(
         x_start, x_num, x_step,
         "r:", 5, "Data 1", fit_polyline,
         show_confidence_interval,
         confidence_diff_min, confidence_diff_max)
     for i in range(len(yy)):
-        chart_plot.addPoint(0, i, xx[i])
+        line_render.addPoint(0, i, xx[i])
 
-    chart_plot.addLine(
+    line_render.addLine(
         x_start, x_num, x_step,
         "g--", 2, "Data 2", fit_polyline,
         show_confidence_interval,
         confidence_diff_min, confidence_diff_max)
     for i in range(len(xx)):
-        chart_plot.addPoint(1, i, yy[i])
+        line_render.addPoint(1, i, yy[i])
 
-    chart_plot.addLine(
+    line_render.addLine(
         x_start, x_num, x_step,
         "b-", 0.5, "Data 3", fit_polyline,
         show_confidence_interval,
         confidence_diff_min, confidence_diff_max)
     for i in range(len(zz)):
-        chart_plot.addPoint(2, i, zz[i])
+        line_render.addPoint(2, i, zz[i])
 
-    chart_plot.renderLine(show_line_label, show_confidence_interval_label)
+    line_render.renderLine(show_line_label, show_confidence_interval_label)
 
