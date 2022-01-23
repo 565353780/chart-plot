@@ -11,8 +11,8 @@ class LineCreater(LineEditor):
 
         self.fit_polyline = False
         self.show_confidence_interval = True
-        self.confidence_diff_min = 5
-        self.confidence_diff_max = 10
+        self.confidence_diff_min = 10
+        self.confidence_diff_max = 20
         return
 
     def setParam(self,

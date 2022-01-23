@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from getch import getch
+import json
 import matplotlib.pyplot as plt
+from getch import getch
 
 from LineMethod.line_renderer import LineRenderer
 
@@ -158,8 +159,8 @@ class LineEditor(LineRenderer):
                     line_width = 2
                     fit_polyline = False
                     show_confidence_interval = True
-                    confidence_diff_min = 5
-                    confidence_diff_max = 10
+                    confidence_diff_min = 10
+                    confidence_diff_max = 20
 
                     new_line_idx = len(self.line_list)
                     self.addLine(line_type,

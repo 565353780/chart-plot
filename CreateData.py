@@ -8,8 +8,8 @@ from LineMethod.line_creater import LineCreater
 if __name__ == "__main__":
     fit_polyline = False
     show_confidence_interval = True
-    confidence_diff_min = 5
-    confidence_diff_max = 10
+    confidence_diff_min = 10
+    confidence_diff_max = 20
     show_line_label = True
     show_confidence_interval_label = False
     save_json_file_path = "./new_data.json"
