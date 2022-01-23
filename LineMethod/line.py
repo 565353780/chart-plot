@@ -28,12 +28,6 @@ class Line(object):
         self.point_list.clear()
         return True
 
-    def setLineProperty(self, line_type, line_width, label):
-        self.line_type = line_type
-        self.line_width = line_width
-        self.label = label
-        return True
-
     def addPoint(self, x, y):
         new_point = Point(x, y)
 

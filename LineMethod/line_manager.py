@@ -15,9 +15,6 @@ class LineManager(object):
         return True
 
     def addLine(self,
-                x_start,
-                x_num,
-                x_step,
                 line_type,
                 line_width,
                 label,
@@ -26,35 +23,15 @@ class LineManager(object):
                 confidence_diff_min,
                 confidence_diff_max):
         new_line = Line(len(self.line_list))
-        if not new_line.setLineProperty(line_type, line_width, label):
-            print("LineManager::addLine :")
-            print("setLineProperty for line " + str(new_line.line_idx) + " failed!")
-            return False
-
-        if not new_line.setXRange(x_start, x_num, x_step):
-            print("LineManager::addLine :")
-            print("setXRange for line " + str(new_line.line_idx) + " failed!")
-            return False
-
+        new_line.line_type = line_type
+        new_line.line_width = line_width
+        new_line.label = label
         new_line.fit_polyline = fit_polyline
         new_line.show_confidence_interval = show_confidence_interval
         new_line.confidence_diff_min = confidence_diff_min
         new_line.confidence_diff_max = confidence_diff_max
 
         self.line_list.append(new_line)
-        return True
-
-    def setPoint(self, line_idx, x, y):
-        if not self.line_list[line_idx].setPoint(x, y):
-            print("LineManager::setPoint :")
-            print("setPoint for line " + str(line_idx) + " failed!")
-            return False
-
-        if self.line_list[line_idx].show_confidence_interval:
-            if not self.line_list[line_idx].updateConfidenceInterval():
-                print("LineManager::setPoint :")
-                print("updateConfidenceInterval for line " + str(line_idx) + " failed!")
-                return False
         return True
 
     def getBBoxXYXY(self):
@@ -125,6 +102,7 @@ class LineManager(object):
             new_line.confidence_diff_min = line_json["confidence_diff_min"]
             new_line.confidence_diff_max = line_json["confidence_diff_max"]
             new_line.confidence_interval_list = line_json["confidence_interval_list"]
+
             self.line_list.append(new_line)
         return True
 

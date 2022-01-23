@@ -61,6 +61,9 @@ class LineEditor(LineRenderer):
             plt.pause(0.001)
 
             x_range, y_range = self.getXYRange()
+            if x_range == 0:
+                x_range = 100
+                y_range = 100
 
             input_key = getch()
 
@@ -129,6 +132,18 @@ class LineEditor(LineRenderer):
                     continue
                 if input_key == "k":
                     edit_y += 0.01 * y_range
+                    continue
+                if input_key == "H":
+                    edit_x -= 0.1 * x_range
+                    continue
+                if input_key == "L":
+                    edit_x += 0.1 * x_range
+                    continue
+                if input_key == "J":
+                    edit_y -= 0.1 * y_range
+                    continue
+                if input_key == "K":
+                    edit_y += 0.1 * y_range
                     continue
                 if input_key == "a":
                     self.line_list[edit_line_idx].addPoint(edit_x, edit_y)
