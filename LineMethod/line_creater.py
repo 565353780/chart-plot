@@ -30,7 +30,7 @@ class LineCreater(LineEditor):
 
         self.addLine(line_type,
                      line_width,
-                     str(len(self.line_list)),
+                     str(0),
                      self.fit_polyline,
                      self.show_confidence_interval,
                      self.confidence_diff_min,
