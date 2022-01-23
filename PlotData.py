@@ -7,7 +7,7 @@ from LineMethod.line_renderer import LineRenderer
 if __name__ == "__main__":
     json_file_path = "./new_data.json"
     show_line_label = True
-    show_confidence_interval_label = True
+    show_confidence_interval_label = False
 
     data_stream = ""
     with open(json_file_path, "r") as f:
