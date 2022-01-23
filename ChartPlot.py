@@ -218,6 +218,21 @@ class ChartPlot:
                 return False
         return True
 
+    def getYRange(self):
+        y_min = 0
+        y_max = 0
+
+        if len(self.line_list) == 0:
+            return y_max - y_min
+
+        y_min = min(self.line_list[0].y_list)
+        y_max = max(self.line_list[0].y_list)
+
+        for line in self.line_list:
+            y_min = min(y_min, min(line.y_list))
+            y_max = max(y_max, max(line.y_list))
+        return y_max - y_min
+
     def renderLine(self, show_line_label, show_confidence_interval_label):
         plt.figure(figsize=(8, 6), dpi=80)
         plt.ion()
@@ -278,6 +293,8 @@ class ChartPlot:
             plt.legend(loc="upper right", shadow=True)
             plt.pause(0.1)
 
+            y_range = self.getYRange()
+
             input_key = getch()
             if input_key == "q":
                 plt.ioff()
@@ -287,16 +304,16 @@ class ChartPlot:
             elif input_key == "l":
                 edit_point_idx = min(edit_point_idx + 1, len(self.line_list[edit_line_idx].point_list) - 1)
             elif input_key == "j":
-                self.line_list[edit_line_idx].point_list[edit_point_idx].y_value -= 0.1
+                self.line_list[edit_line_idx].point_list[edit_point_idx].y_value -= 0.01 * y_range
                 self.line_list[edit_line_idx].updateYValue()
             elif input_key == "k":
-                self.line_list[edit_line_idx].point_list[edit_point_idx].y_value += 0.1
+                self.line_list[edit_line_idx].point_list[edit_point_idx].y_value += 0.01 * y_range
                 self.line_list[edit_line_idx].updateYValue()
             elif input_key == "J":
                 self.line_list[edit_line_idx].confidence_interval_list[edit_point_idx] = max(
-                    self.line_list[edit_line_idx].confidence_interval_list[edit_point_idx] - 0.1, 0)
+                    self.line_list[edit_line_idx].confidence_interval_list[edit_point_idx] - 0.01 * y_range, 0)
             elif input_key == "K":
-                self.line_list[edit_line_idx].confidence_interval_list[edit_point_idx] += 0.1
+                self.line_list[edit_line_idx].confidence_interval_list[edit_point_idx] += 0.1 * y_range
             elif input_key == "n":
                 edit_line_idx = min(edit_line_idx + 1, len(self.line_list) - 1)
             elif input_key == "p":
