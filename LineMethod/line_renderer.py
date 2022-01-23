@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from getch import getch
 import matplotlib.pyplot as plt
 
 from LineMethod.line_manager import LineManager
@@ -24,40 +23,43 @@ class LineRenderer(LineManager):
         plt.ylabel("y label")
 
         for line in self.line_list:
-            line.updateYValue()
+            x_list, y_list = line.getXYList()
             if self.show_line_label:
                 plt.plot(
-                    line.x_list, line.y_list,
+                    x_list, y_list,
                     line.line_type, linewidth=line.line_width,
                     label=line.label)
             else:
                 plt.plot(
-                    line.x_list, line.y_list,
+                    x_list, y_list,
                     line.line_type, linewidth=line.line_width)
             if line.show_confidence_interval:
+                confidence_interval_x_list = []
                 up_confidence_interval_y_list = []
                 down_confidence_interval_y_list = []
                 for i in range(len(line.point_list)):
+                    confidence_interval_x_list.append(line.point_list[i].x)
                     up_confidence_interval_y_list.append(
-                        line.point_list[i].y_value + line.confidence_interval_list[i])
+                        line.point_list[i].y + line.confidence_interval_list[i])
                     down_confidence_interval_y_list.append(
-                        line.point_list[i].y_value - line.confidence_interval_list[i])
+                        line.point_list[i].y - line.confidence_interval_list[i])
                 if self.show_confidence_interval_label:
                     plt.fill_between(
-                        line.x_list,
+                        confidence_interval_x_list,
                         up_confidence_interval_y_list,
                         down_confidence_interval_y_list,
                         alpha=0.5,
                         label=line.label + " Confidence Interval")
                 else:
                     plt.fill_between(
-                        line.x_list,
+                        confidence_interval_x_list,
                         up_confidence_interval_y_list,
                         down_confidence_interval_y_list,
                         alpha=0.5)
 
-        # position can be : upper lower left right center
-        plt.legend(loc="upper right", shadow=True)
+        if self.show_line_label or self.show_confidence_interval_label:
+            # position can be : upper lower left right center
+            plt.legend(loc="upper right", shadow=True)
         return True
 
     def renderLine(self, show_line_label, show_confidence_interval_label):

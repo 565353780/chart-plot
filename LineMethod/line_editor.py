@@ -9,7 +9,30 @@ from LineMethod.line_renderer import LineRenderer
 class LineEditor(LineRenderer):
     def __init__(self):
         LineRenderer.__init__(self)
+
+        self.NORMAL = "NORMAL"
+        self.EDIT = "EDIT"
+        self.ADD = "ADD"
+        self.mode = self.NORMAL
         return
+
+    def updateMode(self, input_key):
+        if input_key == "q":
+            if self.mode == self.NORMAL:
+                return False
+            self.mode = self.NORMAL
+            return True
+        if input_key == "i":
+            if self.mode == self.EDIT:
+                return False
+            self.mode = self.EDIT
+            return True
+        if input_key == "a":
+            if self.mode == self.ADD:
+                return False
+            self.mode = self.ADD
+            return True
+        return False
 
     def editLine(self, show_line_label, show_confidence_interval_label):
         self.show_line_label = show_line_label
@@ -20,42 +43,96 @@ class LineEditor(LineRenderer):
 
         edit_line_idx = 0
         edit_point_idx = 0
+        edit_x = self.line_list[edit_line_idx].point_list[edit_point_idx].x
+        edit_y = self.line_list[edit_line_idx].point_list[edit_point_idx].y
         while True:
             self.renderFrame()
 
-            edit_x_idx = self.line_list[edit_line_idx].point_list[edit_point_idx].x_idx
-            edit_x_value = self.line_list[edit_line_idx].x_list[edit_x_idx]
-            edit_y_value = self.line_list[edit_line_idx].point_list[edit_point_idx].y_value
-            plt.plot([edit_x_value], [edit_y_value], "bo", linewidth=20, label="EDIT")
+            if self.mode != self.ADD:
+                edit_x = self.line_list[edit_line_idx].point_list[edit_point_idx].x
+                edit_y = self.line_list[edit_line_idx].point_list[edit_point_idx].y
+            if self.mode == self.NORMAL:
+                plt.plot([edit_x], [edit_y], "go", linewidth=20, label="NORMAL")
+            elif self.mode == self.EDIT:
+                plt.plot([edit_x], [edit_y], "bo", linewidth=20, label="EDIT")
+            elif self.mode == self.ADD:
+                plt.plot([edit_x], [edit_y], "ro", linewidth=20, label="ADD")
 
-            plt.pause(0.1)
+            plt.pause(0.001)
 
-            y_range = self.getYRange()
+            x_range, y_range = self.getXYRange()
 
             input_key = getch()
-            if input_key == "q":
+
+            if self.updateMode(input_key):
+                if self.mode != self.ADD:
+                    edit_point_idx = \
+                        self.line_list[edit_line_idx].getNearestPointIdx(edit_x, edit_y)
+                continue
+
+            if input_key == "x":
                 plt.ioff()
                 break
-            if input_key == "h":
-                edit_point_idx = max(edit_point_idx - 1, 0)
-            elif input_key == "l":
-                edit_point_idx = min(edit_point_idx + 1, len(self.line_list[edit_line_idx].point_list) - 1)
-            elif input_key == "j":
-                self.line_list[edit_line_idx].point_list[edit_point_idx].y_value -= 0.01 * y_range
-                self.line_list[edit_line_idx].updateYValue()
-            elif input_key == "k":
-                self.line_list[edit_line_idx].point_list[edit_point_idx].y_value += 0.01 * y_range
-                self.line_list[edit_line_idx].updateYValue()
-            elif input_key == "J":
-                self.line_list[edit_line_idx].confidence_interval_list[edit_point_idx] = max(
-                    self.line_list[edit_line_idx].confidence_interval_list[edit_point_idx] - 0.01 * y_range, 0)
-            elif input_key == "K":
-                self.line_list[edit_line_idx].confidence_interval_list[edit_point_idx] += 0.01 * y_range
-            elif input_key == "n":
-                edit_line_idx = min(edit_line_idx + 1, len(self.line_list) - 1)
-            elif input_key == "p":
-                edit_line_idx = max(edit_line_idx - 1, 0)
-            elif input_key == "u":
+
+            if input_key == "u":
                 self.line_list[edit_line_idx].updateConfidenceInterval()
+                continue
+            if input_key == "d":
+                self.line_list[edit_line_idx].point_list.pop(edit_point_idx)
+                edit_point_idx = min(edit_point_idx + 1, len(self.line_list[edit_line_idx].point_list) - 1)
+                self.line_list[edit_line_idx].updateConfidenceInterval()
+                continue
+
+            if self.mode == self.NORMAL:
+                if input_key == "h":
+                    edit_point_idx = max(edit_point_idx - 1, 0)
+                    continue
+                if input_key == "l":
+                    edit_point_idx = min(edit_point_idx + 1, len(self.line_list[edit_line_idx].point_list) - 1)
+                    continue
+                if input_key == "j":
+                    edit_line_idx = max(edit_line_idx - 1, 0)
+                    continue
+                if input_key == "k":
+                    edit_line_idx = min(edit_line_idx + 1, len(self.line_list) - 1)
+                    continue
+                continue
+            if self.mode == self.EDIT:
+                if input_key == "h":
+                    self.line_list[edit_line_idx].point_list[edit_point_idx].x -= 0.01 * x_range
+                    continue
+                if input_key == "l":
+                    self.line_list[edit_line_idx].point_list[edit_point_idx].x += 0.01 * x_range
+                    continue
+                if input_key == "j":
+                    self.line_list[edit_line_idx].point_list[edit_point_idx].y -= 0.01 * y_range
+                    continue
+                if input_key == "k":
+                    self.line_list[edit_line_idx].point_list[edit_point_idx].y += 0.01 * y_range
+                    continue
+                if input_key == "J":
+                    self.line_list[edit_line_idx].confidence_interval_list[edit_point_idx] = max(
+                        self.line_list[edit_line_idx].confidence_interval_list[edit_point_idx] - 0.01 * y_range, 0)
+                    continue
+                if input_key == "K":
+                    self.line_list[edit_line_idx].confidence_interval_list[edit_point_idx] += 0.01 * y_range
+                    continue
+            if self.mode == self.ADD:
+                if input_key == "h":
+                    edit_x -= 0.01 * x_range
+                    continue
+                if input_key == "l":
+                    edit_x += 0.01 * x_range
+                    continue
+                if input_key == "j":
+                    edit_y -= 0.01 * y_range
+                    continue
+                if input_key == "k":
+                    edit_y += 0.01 * y_range
+                    continue
+                if input_key == "a":
+                    self.line_list[edit_line_idx].addPoint(edit_x, edit_y)
+                    self.line_list[edit_line_idx].updateConfidenceInterval()
+                    continue
         return True
 
