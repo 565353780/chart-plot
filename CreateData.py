@@ -49,7 +49,7 @@ if __name__ == "__main__":
     confidence_diff_max = 10
     show_line_label = True
     show_confidence_interval_label = False
-    save_json_file_path = "./coscan_data/test1.json"
+    save_json_file_path = "./new_data.json"
 
     place_data = PlaceData()
 

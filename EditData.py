@@ -5,7 +5,7 @@ import json
 from LineMethod.line_editor import LineEditor
 
 if __name__ == "__main__":
-    json_file_path = "./coscan_data/test.json"
+    json_file_path = "./new_data.json"
     show_line_label = True
     show_confidence_interval_label = True
 
