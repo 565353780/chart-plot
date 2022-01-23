@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 from LineManager import LineManager
 
-class ChartPlot(LineManager):
+class PlaceData(LineManager):
     def __init__(self):
         LineManager.__init__(self)
         return
@@ -16,7 +16,7 @@ class ChartPlot(LineManager):
         plt.ion()
 
         if len(self.line_list) == 0:
-               print("LineManager::renderLine :")
+               print("PlaceData::renderLine :")
                print("no lines to render!")
                return True
 
@@ -25,7 +25,7 @@ class ChartPlot(LineManager):
         while True:
             plt.cla()
 
-            plt.title("LineManager Render")
+            plt.title("PlaceData Render")
             plt.xlabel("x label")
             plt.ylabel("y label")
 
@@ -91,7 +91,7 @@ class ChartPlot(LineManager):
                 self.line_list[edit_line_idx].confidence_interval_list[edit_point_idx] = max(
                     self.line_list[edit_line_idx].confidence_interval_list[edit_point_idx] - 0.01 * y_range, 0)
             elif input_key == "K":
-                self.line_list[edit_line_idx].confidence_interval_list[edit_point_idx] += 0.01 * y_range
+                self.line_list[edit_line_idx].confidence_interval_list[edit_point_idx] += 0.1 * y_range
             elif input_key == "n":
                 edit_line_idx = min(edit_line_idx + 1, len(self.line_list) - 1)
             elif input_key == "p":
@@ -100,14 +100,9 @@ class ChartPlot(LineManager):
                 self.line_list[edit_line_idx].updateConfidenceInterval()
         return True
 
-
-
 if __name__ == "__main__":
-    xx = [1,2,3,4,5,2,3,7,4,3,9,2]
-    yy = [3,6,4,8,2,6,9,4,5,8,1,7]
-    zz = [5,6,8,1,3,4,9,1,3,4,8,1]
     x_start = 0
-    x_num = len(xx)
+    x_num = 100
     x_step = 1
     fit_polyline = False
     show_confidence_interval = True
@@ -116,31 +111,7 @@ if __name__ == "__main__":
     show_line_label = True
     show_confidence_interval_label = False
 
-    chart_plot = ChartPlot()
+    place_data = PlaceData()
 
-    chart_plot.addLine(
-        x_start, x_num, x_step,
-        "r:", 5, "Data 1", fit_polyline,
-        show_confidence_interval,
-        confidence_diff_min, confidence_diff_max)
-    for i in range(len(yy)):
-        chart_plot.addPoint(0, i, xx[i])
-
-    chart_plot.addLine(
-        x_start, x_num, x_step,
-        "g--", 2, "Data 2",fit_polyline,
-        show_confidence_interval,
-        confidence_diff_min, confidence_diff_max)
-    for i in range(len(xx)):
-        chart_plot.addPoint(1, i, yy[i])
-
-    chart_plot.addLine(
-        x_start, x_num, x_step,
-        "b-", 0.5, "Data 3", fit_polyline,
-        show_confidence_interval,
-        confidence_diff_min, confidence_diff_max)
-    for i in range(len(zz)):
-        chart_plot.addPoint(2, i, zz[i])
-
-    chart_plot.renderLine(show_line_label, show_confidence_interval_label)
+    place_data.renderLine(show_line_label, show_confidence_interval_label)
 
