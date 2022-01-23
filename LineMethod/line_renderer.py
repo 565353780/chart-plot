@@ -59,7 +59,7 @@ class LineRenderer(LineManager):
 
         if self.show_line_label or self.show_confidence_interval_label:
             # position can be : upper lower left right center
-            plt.legend(loc="upper right", shadow=True)
+            plt.legend(loc="upper left", shadow=True)
         return True
 
     def renderLine(self, show_line_label, show_confidence_interval_label):
