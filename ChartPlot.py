@@ -27,6 +27,7 @@ class Line:
         self.fit_polyline = False
 
         self.show_confidence_interval = False
+        self.confidence_diff_min = 0.5
         self.confidence_diff_max = 1.0
         self.up_confidence_interval_y_list = []
         self.down_confidence_interval_y_list = []
@@ -145,9 +146,11 @@ class Line:
         self.up_confidence_interval_y_list.clear()
         self.down_confidence_interval_y_list.clear()
         for point in self.point_list:
-            confidence_diff = random() * self.confidence_diff_max
-            self.up_confidence_interval_y_list.append(point.y_value + confidence_diff)
-            self.down_confidence_interval_y_list.append(point.y_value - confidence_diff)
+            confidence_diff = random() * (self.confidence_diff_max - self.confidence_diff_min)
+            self.up_confidence_interval_y_list.append(
+                point.y_value + self.confidence_diff_min + confidence_diff)
+            self.down_confidence_interval_y_list.append(
+                point.y_value - self.confidence_diff_min - confidence_diff)
         return True
 
 class ChartPlot:
@@ -159,7 +162,17 @@ class ChartPlot:
         self.line_list.clear()
         return True
 
-    def addLine(self, x_start, x_num, x_step, line_type, line_width, label, show_confidence_interval, confidence_diff_max):
+    def addLine(self,
+                x_start,
+                x_num,
+                x_step,
+                line_type,
+                line_width,
+                label,
+                fit_polyline,
+                show_confidence_interval,
+                confidence_diff_min,
+                confidence_diff_max):
         new_line = Line(len(self.line_list))
         if not new_line.setLineProperty(line_type, line_width, label):
             print("ChartPlot::addLine :")
@@ -171,7 +184,9 @@ class ChartPlot:
             print("setXRange for line " + str(new_line.line_idx) + " failed!")
             return False
 
+        new_line.fit_polyline = fit_polyline
         new_line.show_confidence_interval = show_confidence_interval
+        new_line.confidence_diff_min = confidence_diff_min
         new_line.confidence_diff_max = confidence_diff_max
 
         self.line_list.append(new_line)
@@ -267,21 +282,27 @@ class ChartPlot:
         return True
 
 if __name__ == "__main__":
-    yy = [1,2,3,4,5,2,3,7,4,3,9,2]
-    xx = [3,6,4,8,2,6,9,4,5,8,1,7]
+    xx = [1,2,3,4,5,2,3,7,4,3,9,2]
+    yy = [3,6,4,8,2,6,9,4,5,8,1,7]
     zz = [5,6,8,1,3,4,9,1,3,4,8,1]
     x_start = 0
     x_num = len(yy)
     x_step = 1
 
     chart_plot = ChartPlot()
-    chart_plot.addLine(x_start, x_num, x_step, "r:", 5, "Data 1", True, 1.0)
-    chart_plot.addLine(x_start, x_num, x_step, "g--", 2, "Data 2", True, 1.0)
-    chart_plot.addLine(x_start, x_num, x_step, "b-", 0.5, "Data 3", True, 1.0)
+
+    chart_plot.addLine(
+        x_start, x_num, x_step, "r:", 5, "Data 1", False, True, 0.8, 1.0)
     for i in range(len(yy)):
-        chart_plot.addPoint(0, i, yy[i])
+        chart_plot.addPoint(0, i, xx[i])
+
+    chart_plot.addLine(
+        x_start, x_num, x_step, "g--", 2, "Data 2", False, True, 0.8, 1.0)
     for i in range(len(xx)):
-        chart_plot.addPoint(1, i, xx[i])
+        chart_plot.addPoint(1, i, yy[i])
+
+    chart_plot.addLine(
+        x_start, x_num, x_step, "b-", 0.5, "Data 3", False, True, 0.8, 1.0)
     for i in range(len(zz)):
         chart_plot.addPoint(2, i, zz[i])
 
