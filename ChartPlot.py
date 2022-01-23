@@ -271,12 +271,12 @@ class ChartPlot:
                 edit_point_idx = min(len(self.line_list[edit_line_idx].point_list) - 1, edit_point_idx + 1)
             elif input_key == "j":
                 self.line_list[edit_line_idx].point_list[edit_point_idx].y_value -= 0.1
-                self.line_list[edit_point_idx].updateYValue()
-                self.line_list[edit_point_idx].updateConfidenceInterval()
+                self.line_list[edit_line_idx].updateYValue()
+                self.line_list[edit_line_idx].updateConfidenceInterval()
             elif input_key == "k":
                 self.line_list[edit_line_idx].point_list[edit_point_idx].y_value += 0.1
-                self.line_list[edit_point_idx].updateYValue()
-                self.line_list[edit_point_idx].updateConfidenceInterval()
+                self.line_list[edit_line_idx].updateYValue()
+                self.line_list[edit_line_idx].updateConfidenceInterval()
             elif input_key == "u":
                 self.line_list[edit_line_idx].updateConfidenceInterval()
         return True
@@ -288,21 +288,29 @@ if __name__ == "__main__":
     x_start = 0
     x_num = len(yy)
     x_step = 1
+    fit_polyline = False
+    show_confidence_interval = False
 
     chart_plot = ChartPlot()
 
     chart_plot.addLine(
-        x_start, x_num, x_step, "r:", 5, "Data 1", False, True, 0.8, 1.0)
+        x_start, x_num, x_step,
+        "r:", 5, "Data 1", fit_polyline,
+        show_confidence_interval, 0.8, 1.0)
     for i in range(len(yy)):
         chart_plot.addPoint(0, i, xx[i])
 
     chart_plot.addLine(
-        x_start, x_num, x_step, "g--", 2, "Data 2", False, True, 0.8, 1.0)
+        x_start, x_num, x_step,
+        "g--", 2, "Data 2",fit_polyline,
+        show_confidence_interval, 0.8, 1.0)
     for i in range(len(xx)):
         chart_plot.addPoint(1, i, yy[i])
 
     chart_plot.addLine(
-        x_start, x_num, x_step, "b-", 0.5, "Data 3", False, True, 0.8, 1.0)
+        x_start, x_num, x_step,
+        "b-", 0.5, "Data 3", fit_polyline,
+        show_confidence_interval, 0.8, 1.0)
     for i in range(len(zz)):
         chart_plot.addPoint(2, i, zz[i])
 
