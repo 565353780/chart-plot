@@ -36,7 +36,7 @@ class PlaceData(LineRenderer):
         self.confidence_diff_max = confidence_diff_max
         return True
 
-    def renderLine(self, show_line_label, show_confidence_interval_label):
+    def placeLine(self, show_line_label, show_confidence_interval_label):
         plt.figure(figsize=(8, 6), dpi=80)
         plt.ion()
 
@@ -130,7 +130,7 @@ if __name__ == "__main__":
     confidence_diff_max = 1.0
     show_line_label = True
     show_confidence_interval_label = False
-    save_json_file_path = "./test.json"
+    save_json_file_path = "./coscan_data/test1.json"
 
     place_data = PlaceData()
 
@@ -142,7 +142,7 @@ if __name__ == "__main__":
                         confidence_diff_min,
                         confidence_diff_max)
 
-    place_data.renderLine(show_line_label, show_confidence_interval_label)
+    place_data.placeLine(show_line_label, show_confidence_interval_label)
 
     data_json = place_data.getDataJson()
     data_json_dump = json.dumps(data_json, indent=4)

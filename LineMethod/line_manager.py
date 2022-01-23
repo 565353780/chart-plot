@@ -6,6 +6,8 @@ from LineMethod.line import Line
 class LineManager(object):
     def __init__(self):
         self.line_list = []
+        self.show_line_label = True
+        self.show_confidence_interval_label = False
         return
 
     def reset(self):
@@ -89,6 +91,9 @@ class LineManager(object):
 
     def getDataJson(self):
         data_json = {}
+        data_json["show_line_label"] = self.show_line_label
+        data_json["show_confidence_interval_label"] = self.show_confidence_interval_label
+        data_json["Lines"] = {}
         line_json = {}
         for line in self.line_list:
             line_json["line_type"] = line.line_type
@@ -102,14 +107,16 @@ class LineManager(object):
             line_json["confidence_diff_min"] = line.confidence_diff_min
             line_json["confidence_diff_max"] = line.confidence_diff_max
             line_json["confidence_interval_list"] = line.confidence_interval_list
-            data_json[line.label] = line_json
+            data_json["Lines"][line.label] = line_json
         return data_json
 
     def loadDataJson(self, data_json):
         self.reset()
-        for line_label in data_json.keys():
+        self.show_line_label = data_json["show_line_label"]
+        self.show_confidence_interval_label = data_json["show_confidence_interval_label"]
+        for line_label in data_json["Lines"].keys():
             new_line = Line(len(self.line_list))
-            line_json = data_json[line_label]
+            line_json = data_json["Lines"][line_label]
             new_line.line_type = line_json["line_type"]
             new_line.line_width = line_json["line_width"]
             new_line.label = line_json["label"]
