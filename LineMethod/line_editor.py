@@ -125,6 +125,24 @@ class LineEditor(LineRenderer):
                 if input_key == "K":
                     self.line_list[edit_line_idx].confidence_interval_list[edit_point_idx] += 0.01 * y_range
                     continue
+                if input_key == "o":
+                    self.line_list[edit_line_idx].confidence_diff_max = max(
+                        self.line_list[edit_line_idx].confidence_diff_max - 0.01 * y_range, 0)
+                    self.line_list[edit_line_idx].updateConfidenceInterval()
+                    continue
+                if input_key == "p":
+                    self.line_list[edit_line_idx].confidence_diff_max += 0.01 * y_range
+                    self.line_list[edit_line_idx].updateConfidenceInterval()
+                    continue
+                if input_key == "n":
+                    self.line_list[edit_line_idx].confidence_diff_min = max(
+                        self.line_list[edit_line_idx].confidence_diff_min - 0.01 * y_range, 0)
+                    self.line_list[edit_line_idx].updateConfidenceInterval()
+                    continue
+                if input_key == "m":
+                    self.line_list[edit_line_idx].confidence_diff_min += 0.01 * y_range
+                    self.line_list[edit_line_idx].updateConfidenceInterval()
+                    continue
             if self.mode == self.ADD:
                 if input_key == "h":
                     edit_x -= 0.01 * x_range
