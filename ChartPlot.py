@@ -29,8 +29,7 @@ class Line:
         self.show_confidence_interval = False
         self.confidence_diff_min = 0.5
         self.confidence_diff_max = 1.0
-        self.up_confidence_interval_y_list = []
-        self.down_confidence_interval_y_list = []
+        self.confidence_interval_list = []
         return
 
     def reset(self):
@@ -143,14 +142,11 @@ class Line:
         return True
 
     def updateConfidenceInterval(self):
-        self.up_confidence_interval_y_list.clear()
-        self.down_confidence_interval_y_list.clear()
-        for point in self.point_list:
+        self.confidence_interval_list.clear()
+        for _ in self.point_list:
             confidence_diff = random() * (self.confidence_diff_max - self.confidence_diff_min)
-            self.up_confidence_interval_y_list.append(
-                point.y_value + self.confidence_diff_min + confidence_diff)
-            self.down_confidence_interval_y_list.append(
-                point.y_value - self.confidence_diff_min - confidence_diff)
+            self.confidence_interval_list.append(
+                self.confidence_diff_min + confidence_diff)
         return True
 
 class ChartPlot:
@@ -242,12 +238,24 @@ class ChartPlot:
 
             for line in self.line_list:
                 line.updateYValue()
-                plt.plot(line.x_list, line.y_list, line.line_type, linewidth=line.line_width, label=line.label)
+                plt.plot(
+                    line.x_list,
+                    line.y_list,
+                    line.line_type,
+                    linewidth=line.line_width,
+                    label=line.label)
                 if line.show_confidence_interval:
+                    up_confidence_interval_y_list = []
+                    down_confidence_interval_y_list = []
+                    for i in range(len(line.point_list)):
+                        up_confidence_interval_y_list.append(
+                            line.point_list[i].y_value + line.confidence_interval_list[i])
+                        down_confidence_interval_y_list.append(
+                            line.point_list[i].y_value - line.confidence_interval_list[i])
                     plt.fill_between(
                         line.x_list,
-                        line.up_confidence_interval_y_list,
-                        line.down_confidence_interval_y_list,
+                        up_confidence_interval_y_list,
+                        down_confidence_interval_y_list,
                         alpha=0.5,
                         label="Data " + str(line.line_idx) + " Confidence Interval"
                     )
@@ -272,11 +280,13 @@ class ChartPlot:
             elif input_key == "j":
                 self.line_list[edit_line_idx].point_list[edit_point_idx].y_value -= 0.1
                 self.line_list[edit_line_idx].updateYValue()
-                self.line_list[edit_line_idx].updateConfidenceInterval()
             elif input_key == "k":
                 self.line_list[edit_line_idx].point_list[edit_point_idx].y_value += 0.1
                 self.line_list[edit_line_idx].updateYValue()
-                self.line_list[edit_line_idx].updateConfidenceInterval()
+            elif input_key == "J":
+                self.line_list[edit_line_idx].confidence_interval_list[edit_point_idx] -= 0.1
+            elif input_key == "K":
+                self.line_list[edit_line_idx].confidence_interval_list[edit_point_idx] += 0.1
             elif input_key == "u":
                 self.line_list[edit_line_idx].updateConfidenceInterval()
         return True
@@ -286,10 +296,10 @@ if __name__ == "__main__":
     yy = [3,6,4,8,2,6,9,4,5,8,1,7]
     zz = [5,6,8,1,3,4,9,1,3,4,8,1]
     x_start = 0
-    x_num = len(yy)
+    x_num = len(xx)
     x_step = 1
     fit_polyline = False
-    show_confidence_interval = False
+    show_confidence_interval = True
 
     chart_plot = ChartPlot()
 
