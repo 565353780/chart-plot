@@ -5,7 +5,7 @@ import json
 from LineMethod.line_renderer import LineRenderer
 
 if __name__ == "__main__":
-    json_file_path = "./new_data.json"
+    json_file_path = "./scene_recovery_rate.json"
     show_line_label = True
     show_confidence_interval_label = False
 

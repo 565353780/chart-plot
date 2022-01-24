@@ -132,6 +132,56 @@ class Line(object):
                 nearest_point_dist2 = current_point_dist2
         return nearest_point_idx
 
+    def moveUp(self, move_dist):
+        if move_dist == 0:
+            return True
+
+        for point in self.point_list:
+            point.y += move_dist
+        return True
+
+    def moveDown(self, move_dist):
+        if move_dist == 0:
+            return True
+
+        for point in self.point_list:
+            point.y -= move_dist
+        return True
+
+    def moveLeft(self, move_dist):
+        if move_dist == 0:
+            return True
+
+        for point in self.point_list:
+            point.x -= move_dist
+        return True
+
+    def moveRight(self, move_dist):
+        if move_dist == 0:
+            return True
+
+        for point in self.point_list:
+            point.x += move_dist
+        return True
+
+    def scaleX(self, x_min, scale):
+        if x_min is None:
+            return True
+
+        for point in self.point_list:
+            point.x = x_min + scale * (point.x - x_min)
+        return True
+
+    def scaleY(self, y_min, scale):
+        if y_min is None:
+            return True
+
+        for point in self.point_list:
+            point.y = y_min + scale * (point.y - y_min)
+        for i in range(len(self.confidence_interval_list)):
+            self.confidence_interval_list[i] *= scale
+        return True
+
     def updateConfidenceInterval(self):
         self.confidence_interval_list.clear()
         for _ in self.point_list:

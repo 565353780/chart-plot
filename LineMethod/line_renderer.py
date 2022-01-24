@@ -66,7 +66,7 @@ class LineRenderer(LineManager):
         self.show_line_label = show_line_label
         self.show_confidence_interval_label = show_confidence_interval_label
 
-        plt.figure(figsize=(16, 12), dpi=80)
+        plt.figure(figsize=(self.fig_size[0], self.fig_size[1]), dpi=self.dpi)
         plt.ion()
 
         while True:

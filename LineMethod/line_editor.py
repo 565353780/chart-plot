@@ -11,11 +11,14 @@ class LineEditor(LineRenderer):
     def __init__(self):
         LineRenderer.__init__(self)
 
-        self. move_scale = 0.002
+        self.move_scale = 0.002
+        self.scale_lower = 0.9
+        self.scale_upper = 1.1
 
         self.NORMAL = "NORMAL"
         self.EDIT = "EDIT"
         self.ADD = "ADD"
+        self.SCALE = "SCALE"
         self.mode = self.NORMAL
         return
 
@@ -35,13 +38,18 @@ class LineEditor(LineRenderer):
                 return False
             self.mode = self.ADD
             return True
+        if input_key == "s":
+            if self.mode == self.SCALE:
+                return False
+            self.mode = self.SCALE
+            return True
         return False
 
     def editLine(self, show_line_label, show_confidence_interval_label):
         self.show_line_label = show_line_label
         self.show_confidence_interval_label = show_confidence_interval_label
 
-        plt.figure(figsize=(16, 12), dpi=80)
+        plt.figure(figsize=(self.fig_size[0], self.fig_size[1]), dpi=self.dpi)
         plt.ion()
 
         edit_line_idx = 0
@@ -64,6 +72,7 @@ class LineEditor(LineRenderer):
             plt.pause(0.001)
 
             x_range, y_range = self.getXYRange()
+            x_min, y_min, _, _ = self.getBBoxXYXY()
             if x_range == 0:
                 x_range = 100
                 y_range = 100
@@ -195,6 +204,43 @@ class LineEditor(LineRenderer):
                     self.line_list[new_line_idx].updateConfidenceInterval()
                     edit_line_idx = new_line_idx
                     edit_point_idx = 0
+                    continue
+            if self.mode == self.SCALE:
+                if input_key == "h":
+                    move_dist = self.move_scale * x_range
+                    edit_x -= move_dist
+                    self.moveLeft(move_dist)
+                    continue
+                if input_key == "l":
+                    move_dist = self.move_scale * x_range
+                    edit_x += move_dist
+                    self.moveRight(move_dist)
+                    continue
+                if input_key == "j":
+                    move_dist = self.move_scale * y_range
+                    edit_y -= move_dist
+                    self.moveDown(move_dist)
+                    continue
+                if input_key == "k":
+                    move_dist = self.move_scale * y_range
+                    edit_y += move_dist
+                    self.moveUp(move_dist)
+                    continue
+                if input_key == "H":
+                    edit_x = x_min + self.scale_lower * (edit_x - x_min)
+                    self.scaleX(self.scale_lower)
+                    continue
+                if input_key == "L":
+                    edit_x = x_min + self.scale_upper * (edit_x - x_min)
+                    self.scaleX(self.scale_upper)
+                    continue
+                if input_key == "J":
+                    edit_y = y_min + self.scale_lower * (edit_y - y_min)
+                    self.scaleY(self.scale_lower)
+                    continue
+                if input_key == "K":
+                    edit_y = y_min + self.scale_upper * (edit_y - y_min)
+                    self.scaleY(self.scale_upper)
                     continue
         return True
 

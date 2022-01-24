@@ -64,16 +64,68 @@ class LineManager(object):
                 continue
 
             x_min = min(x_min, line_x_min)
-            x_max = max(x_max, line_x_max)
             y_min = min(y_min, line_y_min)
+            x_max = max(x_max, line_x_max)
             y_max = max(y_max, line_y_max)
-        return x_min, x_max, y_min, y_max
+        return x_min, y_min, x_max, y_max
 
     def getXYRange(self):
-        x_min, x_max, y_min, y_max = self.getBBoxXYXY()
+        x_min, y_min, x_max, y_max = self.getBBoxXYXY()
         if x_min is None:
             return 0, 0
         return x_max - x_min, y_max - y_min
+
+    def moveUp(self, move_dist):
+        if move_dist == 0:
+            return True
+
+        for line in self.line_list:
+            line.moveUp(move_dist)
+        return True
+
+    def moveDown(self, move_dist):
+        if move_dist == 0:
+            return True
+
+        for line in self.line_list:
+            line.moveDown(move_dist)
+        return True
+
+    def moveLeft(self, move_dist):
+        if move_dist == 0:
+            return True
+
+        for line in self.line_list:
+            line.moveLeft(move_dist)
+        return True
+
+    def moveRight(self, move_dist):
+        if move_dist == 0:
+            return True
+
+        for line in self.line_list:
+            line.moveRight(move_dist)
+        return True
+
+    def scaleX(self, scale):
+        x_min, _, _, _ = self.getBBoxXYXY()
+
+        if x_min is None:
+            return True
+
+        for line in self.line_list:
+            line.scaleX(x_min, scale)
+        return True
+
+    def scaleY(self, scale):
+        _, y_min, _, _ = self.getBBoxXYXY()
+
+        if y_min is None:
+            return True
+
+        for line in self.line_list:
+            line.scaleY(y_min, scale)
+        return True
 
     def getDataJson(self):
         data_json = {}
