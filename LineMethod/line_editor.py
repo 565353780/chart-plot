@@ -11,6 +11,8 @@ class LineEditor(LineRenderer):
     def __init__(self):
         LineRenderer.__init__(self)
 
+        self. move_scale = 0.002
+
         self.NORMAL = "NORMAL"
         self.EDIT = "EDIT"
         self.ADD = "ADD"
@@ -107,66 +109,67 @@ class LineEditor(LineRenderer):
                 continue
             if self.mode == self.EDIT:
                 if input_key == "h":
-                    self.line_list[edit_line_idx].point_list[edit_point_idx].x -= 0.01 * x_range
+                    self.line_list[edit_line_idx].point_list[edit_point_idx].x -= self.move_scale * x_range
                     continue
                 if input_key == "l":
-                    self.line_list[edit_line_idx].point_list[edit_point_idx].x += 0.01 * x_range
+                    self.line_list[edit_line_idx].point_list[edit_point_idx].x += self.move_scale * x_range
                     continue
                 if input_key == "j":
-                    self.line_list[edit_line_idx].point_list[edit_point_idx].y -= 0.01 * y_range
+                    self.line_list[edit_line_idx].point_list[edit_point_idx].y -= self.move_scale * y_range
                     continue
                 if input_key == "k":
-                    self.line_list[edit_line_idx].point_list[edit_point_idx].y += 0.01 * y_range
+                    self.line_list[edit_line_idx].point_list[edit_point_idx].y += self.move_scale * y_range
                     continue
                 if input_key == "J":
                     self.line_list[edit_line_idx].confidence_interval_list[edit_point_idx] = max(
-                        self.line_list[edit_line_idx].confidence_interval_list[edit_point_idx] - 0.01 * y_range, 0)
+                        self.line_list[edit_line_idx].confidence_interval_list[edit_point_idx] - self.move_scale * y_range, 0)
                     continue
                 if input_key == "K":
-                    self.line_list[edit_line_idx].confidence_interval_list[edit_point_idx] += 0.01 * y_range
+                    self.line_list[edit_line_idx].confidence_interval_list[edit_point_idx] += self.move_scale * y_range
                     continue
                 if input_key == "o":
                     self.line_list[edit_line_idx].confidence_diff_max = max(
-                        self.line_list[edit_line_idx].confidence_diff_max - 0.01 * y_range, 0)
+                        self.line_list[edit_line_idx].confidence_diff_max - self.move_scale * y_range,
+                        self.line_list[edit_line_idx].confidence_diff_min)
                     self.line_list[edit_line_idx].updateConfidenceInterval()
                     continue
                 if input_key == "p":
-                    self.line_list[edit_line_idx].confidence_diff_max += 0.01 * y_range
+                    self.line_list[edit_line_idx].confidence_diff_max += self.move_scale * y_range
                     self.line_list[edit_line_idx].updateConfidenceInterval()
                     continue
                 if input_key == "n":
                     self.line_list[edit_line_idx].confidence_diff_min = max(
-                        self.line_list[edit_line_idx].confidence_diff_min - 0.01 * y_range, 0)
+                        self.line_list[edit_line_idx].confidence_diff_min - self.move_scale * y_range, 0)
                     self.line_list[edit_line_idx].updateConfidenceInterval()
                     continue
                 if input_key == "m":
-                    self.line_list[edit_line_idx].confidence_diff_min += 0.01 * y_range
+                    self.line_list[edit_line_idx].confidence_diff_min += self.move_scale * y_range
                     self.line_list[edit_line_idx].updateConfidenceInterval()
                     continue
             if self.mode == self.ADD:
                 if input_key == "h":
-                    edit_x -= 0.01 * x_range
+                    edit_x -= self.move_scale * x_range
                     continue
                 if input_key == "l":
-                    edit_x += 0.01 * x_range
+                    edit_x += self.move_scale * x_range
                     continue
                 if input_key == "j":
-                    edit_y -= 0.01 * y_range
+                    edit_y -= self.move_scale * y_range
                     continue
                 if input_key == "k":
-                    edit_y += 0.01 * y_range
+                    edit_y += self.move_scale * y_range
                     continue
                 if input_key == "H":
-                    edit_x -= 0.1 * x_range
+                    edit_x -= 10.0 * self.move_scale * x_range
                     continue
                 if input_key == "L":
-                    edit_x += 0.1 * x_range
+                    edit_x += 10.0 * self.move_scale * x_range
                     continue
                 if input_key == "J":
-                    edit_y -= 0.1 * y_range
+                    edit_y -= 10.0 * self.move_scale * y_range
                     continue
                 if input_key == "K":
-                    edit_y += 0.1 * y_range
+                    edit_y += 10.0 * self.move_scale * y_range
                     continue
                 if input_key == "a":
                     self.line_list[edit_line_idx].addPoint(edit_x, edit_y)

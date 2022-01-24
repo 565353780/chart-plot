@@ -5,9 +5,17 @@ from LineMethod.line import Line
 
 class LineManager(object):
     def __init__(self):
-        self.line_list = []
+        self.title = "Title"
+        self.x_label = "X Label"
+        self.y_label = "Y Label"
+        self.marker = ""
+        self.fill_alpha = 0.2
+        self.fig_size = [20, 15]
+        self.dpi = 80
         self.show_line_label = True
         self.show_confidence_interval_label = False
+
+        self.line_list = []
         return
 
     def reset(self):
@@ -69,6 +77,13 @@ class LineManager(object):
 
     def getDataJson(self):
         data_json = {}
+        data_json["title"] = self.title
+        data_json["x_label"] = self.x_label
+        data_json["y_label"] = self.y_label
+        data_json["marker"] = self.marker
+        data_json["fill_alpha"] = self.fill_alpha
+        data_json["fig_size"] = self.fig_size
+        data_json["dpi"] = self.dpi
         data_json["show_line_label"] = self.show_line_label
         data_json["show_confidence_interval_label"] = self.show_confidence_interval_label
         data_json["Lines"] = {}
@@ -88,6 +103,13 @@ class LineManager(object):
 
     def loadDataJson(self, data_json):
         self.reset()
+        self.title = data_json["title"]
+        self.x_label = data_json["x_label"]
+        self.y_label = data_json["y_label"]
+        self.marker = data_json["marker"]
+        self.fill_alpha = data_json["fill_alpha"]
+        self.fig_size = data_json["fig_size"]
+        self.dpi = data_json["dpi"]
         self.show_line_label = data_json["show_line_label"]
         self.show_confidence_interval_label = data_json["show_confidence_interval_label"]
         data_json["Lines"].keys()

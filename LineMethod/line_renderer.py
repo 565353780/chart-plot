@@ -18,9 +18,9 @@ class LineRenderer(LineManager):
 
         plt.cla()
 
-        plt.title("LineRenderer")
-        plt.xlabel("x label")
-        plt.ylabel("y label")
+        plt.title(self.title)
+        plt.xlabel(self.x_label)
+        plt.ylabel(self.y_label)
 
         for line in self.line_list:
             x_list, y_list = line.getXYList()
@@ -28,11 +28,11 @@ class LineRenderer(LineManager):
                 plt.plot(
                     x_list, y_list,
                     line.line_type, linewidth=line.line_width,
-                    label=line.label)
+                    label=line.label, marker=self.marker)
             else:
                 plt.plot(
                     x_list, y_list,
-                    line.line_type, linewidth=line.line_width)
+                    line.line_type, linewidth=line.line_width, marker=self.marker)
             if line.show_confidence_interval:
                 confidence_interval_x_list = []
                 up_confidence_interval_y_list = []
@@ -48,18 +48,18 @@ class LineRenderer(LineManager):
                         confidence_interval_x_list,
                         up_confidence_interval_y_list,
                         down_confidence_interval_y_list,
-                        alpha=0.5,
+                        alpha=self.fill_alpha,
                         label=line.label + " Confidence Interval")
                 else:
                     plt.fill_between(
                         confidence_interval_x_list,
                         up_confidence_interval_y_list,
                         down_confidence_interval_y_list,
-                        alpha=0.5)
+                        alpha=self.fill_alpha)
 
         if self.show_line_label or self.show_confidence_interval_label:
             # position can be : upper lower left right center
-            plt.legend(loc="upper left", shadow=True)
+            plt.legend(loc="lower right", shadow=True)
         return True
 
     def renderLine(self, show_line_label, show_confidence_interval_label):
@@ -77,9 +77,6 @@ def demo():
     xx = [1,2,3,4,5,2,3,7,4,3,9,2]
     yy = [3,6,4,8,2,6,9,4,5,8,1,7]
     zz = [5,6,8,1,3,4,9,1,3,4,8,1]
-    x_start = 0
-    x_num = len(xx)
-    x_step = 1
     fit_polyline = False
     show_confidence_interval = True
     confidence_diff_min = 0.5
@@ -93,28 +90,25 @@ def demo():
     line_renderer.show_confidence_interval_label = show_confidence_interval_label
 
     line_renderer.addLine(
-        x_start, x_num, x_step,
         "r:", 5, "Data 1", fit_polyline,
         show_confidence_interval,
         confidence_diff_min, confidence_diff_max)
     for i in range(len(yy)):
-        line_renderer.addPoint(0, i, xx[i])
+        line_renderer.line_list[0].addPoint(i, xx[i])
 
     line_renderer.addLine(
-        x_start, x_num, x_step,
         "g--", 2, "Data 2", fit_polyline,
         show_confidence_interval,
         confidence_diff_min, confidence_diff_max)
     for i in range(len(xx)):
-        line_renderer.addPoint(1, i, yy[i])
+        line_renderer.line_list[1].addPoint(i, yy[i])
 
     line_renderer.addLine(
-        x_start, x_num, x_step,
         "b-", 0.5, "Data 3", fit_polyline,
         show_confidence_interval,
         confidence_diff_min, confidence_diff_max)
     for i in range(len(zz)):
-        line_renderer.addPoint(2, i, zz[i])
+        line_renderer.line_list[2].addPoint(i, zz[i])
 
     line_renderer.renderLine(show_line_label, show_confidence_interval_label)
     return True
