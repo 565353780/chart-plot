@@ -142,6 +142,7 @@ class LineManager(object):
         for line in self.line_list:
             line_json = {}
             line_json["line_type"] = line.line_type
+            line_json["line_color"] = line.line_color
             line_json["line_width"] = line.line_width
             line_json["label"] = line.label
             line_json["point_list"] = line.getPointData()
@@ -169,6 +170,7 @@ class LineManager(object):
             new_line = Line(len(self.line_list))
             line_json = data_json["Lines"][line_key]
             new_line.line_type = line_json["line_type"]
+            self.line_color = line_json["line_color"]
             new_line.line_width = line_json["line_width"]
             new_line.label = line_json["label"]
             new_line.loadPointData(line_json["point_list"])

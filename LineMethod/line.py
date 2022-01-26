@@ -11,6 +11,7 @@ class Line(object):
         self.line_idx = line_idx
 
         self.line_type = "-"
+        self.line_color = ""
         self.line_width = 2
         self.label = str(self.line_idx)
 
