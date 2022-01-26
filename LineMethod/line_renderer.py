@@ -27,12 +27,12 @@ class LineRenderer(LineManager):
             if self.show_line_label:
                 plt.plot(
                     x_list, y_list,
-                    line.line_type, color=self.line_color, linewidth=line.line_width,
+                    line.line_type, color=line.line_color, linewidth=line.line_width,
                     label=line.label, marker=self.marker)
             else:
                 plt.plot(
                     x_list, y_list,
-                    line.line_type, color=self.line_color, linewidth=line.line_width,
+                    line.line_type, color=line.line_color, linewidth=line.line_width,
                     marker=self.marker)
             if line.show_confidence_interval:
                 confidence_interval_x_list = []
@@ -50,13 +50,15 @@ class LineRenderer(LineManager):
                         up_confidence_interval_y_list,
                         down_confidence_interval_y_list,
                         alpha=self.fill_alpha,
+                        color=line.line_color,
                         label=line.label + " Confidence Interval")
                 else:
                     plt.fill_between(
                         confidence_interval_x_list,
                         up_confidence_interval_y_list,
                         down_confidence_interval_y_list,
-                        alpha=self.fill_alpha)
+                        alpha=self.fill_alpha,
+                        color=line.line_color)
 
         if self.show_line_label or self.show_confidence_interval_label:
             # position can be : upper lower left right center
