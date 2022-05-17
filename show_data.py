@@ -18,13 +18,13 @@ def getData():
         for line in f.readlines():
             line_split_list = line.replace(" ", "").split("\n")[0].split("|")[1:-1]
             valid_line_data = \
-                [line_split_list[col_idx] for col_idx in metric_col_idx_list]
+                [float(line_split_list[col_idx]) for col_idx in metric_col_idx_list]
             data_list.append(valid_line_data)
 
     chart_data_dict = {}
     for metric_name in metric_name_list:
         chart_data_dict[metric_name] = {}
-        chart_data_dict[metric_name]["x"] = [i for i in range(3, 11)]
+        chart_data_dict[metric_name]["x"] = [1.0 * i for i in range(3, 11)]
 
     scene_level_list = ["Small", "Middle", "Large"]
     for metric_idx in range(len(metric_name_list)):
@@ -89,9 +89,6 @@ if __name__ == "__main__":
                 line_creater.line_list[new_line_idx].addPoint(
                     chart_x_list[i], chart_y_list[i])
             line_creater.line_list[new_line_idx].updateConfidenceInterval()
-
-        line_creater.renderLine(show_line_label, show_confidence_interval_label)
-        continue
 
         chart_save_path = "./test/" + chart_name + "_data.json"
         data_json = line_creater.getDataJson()
