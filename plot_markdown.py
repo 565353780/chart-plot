@@ -41,9 +41,8 @@ def getData():
 
 if __name__ == "__main__":
     chart_data_dict = getData()
-    confidence_diff_min_list = [100, 1, 0.1, 0.1]
-    confidence_diff_max_list = [200, 2, 0.2, 0.2]
     line_color_list = ["tomato", "teal", "orange"]
+    json_save_folder_path = "/home/chli/chLi/coscan_data/different_robot_num/"
 
     fit_polyline = False
     show_confidence_interval = True
@@ -105,12 +104,7 @@ if __name__ == "__main__":
                     chart_x_list[i], chart_y_list[i])
             line_creater.line_list[new_line_idx].updateConfidenceInterval()
 
-        line_creater.savePDF("./test/" + chart_name + "_chart.pdf",
-                             show_line_label,
-                             show_confidence_interval_label)
-        continue
-
-        chart_save_path = "./test/" + chart_name + "_data.json"
+        chart_save_path = json_save_folder_path + chart_name + "_data.json"
         data_json = line_creater.getDataJson()
         data_json_dump = json.dumps(data_json, indent=4)
         with open(chart_save_path, "w") as f:

@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import json
+
 from LineMethod.line_renderer import LineRenderer
 
 if __name__ == "__main__":
