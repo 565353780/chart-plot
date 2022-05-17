@@ -10,7 +10,7 @@ def getData():
     chart_data_dict = [robot_num][metric_name][x or scene_level] -> value_list
     '''
     data_file_path = "/home/chli/chLi/coscan_data/different_robot_num.txt"
-    metric_name_list = ["DC", "TC", "D-LB", "T-LB"]
+    metric_name_list = ["TC", "DC", "D-LB", "T-LB"]
     metric_col_idx_list = [5, 6, 11, 12]
     data_list = []
 
@@ -41,19 +41,34 @@ def getData():
 
 if __name__ == "__main__":
     chart_data_dict = getData()
+    confidence_diff_min_list = [100, 1, 0.1, 0.1]
+    confidence_diff_max_list = [200, 2, 0.2, 0.2]
+    line_color_list = ["tomato", "teal", "orange"]
 
     fit_polyline = False
-    show_confidence_interval = False
-    confidence_diff_min = 0
-    confidence_diff_max = 0
+    show_confidence_interval = True
+    confidence_diff_min = 10
+    confidence_diff_max = 20
     show_line_label = True
     show_confidence_interval_label = False
 
     line_type = "-"
     line_width = 2
-    line_color_list = ["tomato", "teal", "orange"]
 
     for chart_name in chart_data_dict.keys():
+        if chart_name == "TC":
+            confidence_diff_min = 1
+            confidence_diff_max = 2
+        elif chart_name == "DC":
+            confidence_diff_min = 50
+            confidence_diff_max = 100
+        elif chart_name == "D-LB":
+            confidence_diff_min = 0.01
+            confidence_diff_max = 0.02
+        elif chart_name == "T-LB":
+            confidence_diff_min = 0.005
+            confidence_diff_max = 0.01
+
         line_creater = LineCreater()
 
         line_creater.setParam(fit_polyline,
@@ -89,6 +104,11 @@ if __name__ == "__main__":
                 line_creater.line_list[new_line_idx].addPoint(
                     chart_x_list[i], chart_y_list[i])
             line_creater.line_list[new_line_idx].updateConfidenceInterval()
+
+        line_creater.savePDF("./test/" + chart_name + "_chart.pdf",
+                             show_line_label,
+                             show_confidence_interval_label)
+        continue
 
         chart_save_path = "./test/" + chart_name + "_data.json"
         data_json = line_creater.getDataJson()

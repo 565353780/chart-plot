@@ -65,6 +65,20 @@ class LineRenderer(LineManager):
             plt.legend(loc="lower right", shadow=True)
         return True
 
+    def savePDF(self,
+                save_file_path,
+                show_line_label,
+                show_confidence_interval_label):
+        self.show_line_label = show_line_label
+        self.show_confidence_interval_label = show_confidence_interval_label
+
+        plt.figure(figsize=(self.fig_size[0], self.fig_size[1]), dpi=self.dpi)
+        #  plt.ion()
+
+        self.renderFrame()
+        plt.savefig(save_file_path)
+        return True
+
     def renderLine(self, show_line_label, show_confidence_interval_label):
         self.show_line_label = show_line_label
         self.show_confidence_interval_label = show_confidence_interval_label
