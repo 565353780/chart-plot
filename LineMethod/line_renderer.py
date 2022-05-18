@@ -8,6 +8,10 @@ from LineMethod.line_manager import LineManager
 class LineRenderer(LineManager):
     def __init__(self):
         LineManager.__init__(self)
+
+        self.axis_font = {'family' : 'DejaVu Sans',
+                     'weight' : 'normal',
+                     'size'   : self.axis_font_size}
         return
 
     def renderFrame(self):
@@ -16,11 +20,13 @@ class LineRenderer(LineManager):
            print("no lines to render!")
            return True
 
+        self.axis_font['size'] = self.axis_font_size
+
         plt.cla()
 
-        plt.title(self.title)
-        plt.xlabel(self.x_label)
-        plt.ylabel(self.y_label)
+        plt.title(self.title, self.axis_font)
+        plt.xlabel(self.x_label, self.axis_font)
+        plt.ylabel(self.y_label, self.axis_font)
 
         for line in self.line_list:
             x_list, y_list = line.getXYList()
@@ -62,7 +68,7 @@ class LineRenderer(LineManager):
 
         if self.show_line_label or self.show_confidence_interval_label:
             # position can be : upper lower left right center
-            plt.legend(loc="lower right", shadow=True)
+            plt.legend(loc="lower right", shadow=True, fontsize=self.label_font_size)
         return True
 
     def savePDF(self,
