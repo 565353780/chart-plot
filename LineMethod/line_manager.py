@@ -10,6 +10,9 @@ class LineManager(object):
         self.y_label = "Y Label"
         self.axis_font_size = 30
         self.label_font_size = 20
+        self.tick_font_size = 20
+        # position can be : upper lower left right center auto
+        self.label_position = "lower right"
         self.marker = ""
         self.fill_alpha = 0.2
         self.fig_size = [20, 15]
@@ -136,6 +139,8 @@ class LineManager(object):
         data_json["y_label"] = self.y_label
         data_json["axis_font_size"] = self.axis_font_size
         data_json["label_font_size"] = self.label_font_size
+        data_json["tick_font_size"] = self.tick_font_size
+        data_json["label_position"] = self.label_position
         data_json["marker"] = self.marker
         data_json["fill_alpha"] = self.fill_alpha
         data_json["fig_size"] = self.fig_size
@@ -165,6 +170,8 @@ class LineManager(object):
         self.y_label = data_json["y_label"]
         self.axis_font_size = data_json["axis_font_size"]
         self.label_font_size = data_json["label_font_size"]
+        self.tick_font_size = data_json["tick_font_size"]
+        self.label_position = data_json["label_position"]
         self.marker = data_json["marker"]
         self.fill_alpha = data_json["fill_alpha"]
         self.fig_size = data_json["fig_size"]

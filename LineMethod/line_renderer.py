@@ -27,6 +27,7 @@ class LineRenderer(LineManager):
         plt.title(self.title, self.axis_font)
         plt.xlabel(self.x_label, self.axis_font)
         plt.ylabel(self.y_label, self.axis_font)
+        plt.tick_params(labelsize=self.tick_font_size)
 
         for line in self.line_list:
             x_list, y_list = line.getXYList()
@@ -67,8 +68,10 @@ class LineRenderer(LineManager):
                         color=line.line_color)
 
         if self.show_line_label or self.show_confidence_interval_label:
-            # position can be : upper lower left right center
-            plt.legend(loc="lower right", shadow=True, fontsize=self.label_font_size)
+            plt.legend(loc=self.label_position, shadow=True, fontsize=self.label_font_size)
+            return True
+
+        plt.legend()
         return True
 
     def savePDF(self,
