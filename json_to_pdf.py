@@ -9,7 +9,7 @@ from LineMethod.line_renderer import LineRenderer
 def demo():
     json_file_path = "/home/chli/chLi/coscan_data/different_robot_num/DC_data.json"
     show_line_label = True
-    show_confidence_interval_label = True
+    show_confidence_interval_label = False
     pdf_save_file_path = "/home/chli/chLi/coscan_data/different_robot_num/DC_chart.pdf"
 
     data_stream = ""
@@ -28,7 +28,7 @@ def demo():
 def demo_folder():
     json_file_folder_path = "/home/chli/chLi/coscan_data/different_robot_num/"
     show_line_label = True
-    show_confidence_interval_label = True
+    show_confidence_interval_label = False
 
     for json_file_name in os.listdir(json_file_folder_path):
         if json_file_name[-5:] != ".json":
