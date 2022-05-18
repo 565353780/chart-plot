@@ -85,7 +85,7 @@ class LineRenderer(LineManager):
         #  plt.ion()
 
         self.renderFrame()
-        plt.savefig(save_file_path)
+        plt.savefig(save_file_path, bbox_inches="tight")
         return True
 
     def renderLine(self, show_line_label, show_confidence_interval_label):
