@@ -74,6 +74,19 @@ class LineRenderer(LineManager):
         plt.legend()
         return True
 
+    def renderLine(self, show_line_label, show_confidence_interval_label):
+        self.show_line_label = show_line_label
+        self.show_confidence_interval_label = show_confidence_interval_label
+
+        plt.figure(figsize=(self.fig_size[0], self.fig_size[1]), dpi=self.dpi)
+        plt.ion()
+
+        while True:
+            if not self.renderFrame():
+                break
+            plt.pause(0.001)
+        return True
+
     def savePDF(self,
                 save_file_path,
                 show_line_label,
@@ -87,17 +100,6 @@ class LineRenderer(LineManager):
         self.renderFrame()
         plt.savefig(save_file_path, bbox_inches="tight")
         return True
-
-    def renderLine(self, show_line_label, show_confidence_interval_label):
-        self.show_line_label = show_line_label
-        self.show_confidence_interval_label = show_confidence_interval_label
-
-        plt.figure(figsize=(self.fig_size[0], self.fig_size[1]), dpi=self.dpi)
-        plt.ion()
-
-        while True:
-            self.renderFrame()
-            plt.pause(0.001)
 
 def demo():
     xx = [1,2,3,4,5,2,3,7,4,3,9,2]
